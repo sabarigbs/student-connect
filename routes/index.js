@@ -3,6 +3,8 @@ var router = express.Router();
 var mysql = require('mysql');
 var username;
 var len;
+var role;
+var message;
 /* GET home page. */
 router.post('/', function(req, response, next) {
   var con = mysql.createConnection(
@@ -20,16 +22,27 @@ router.post('/', function(req, response, next) {
   });
   
   username=req.body.username;
+  role = req.body.role;
   //res.render('index', { title: 'Express' });
-  con.query('SELECT name FROM `students` where `rollno` = ? ',[username],function(err,res,fields)
+  if(role=='students')
   {
-    if(err) throw err;
-    len=res.Length;
-  });
-  if(len!='undefined')
-   response.send(200,username);
-  else
-    response.send(500,'User Not Found');
+    con.query('SELECT name FROM `students` where `rollno` = ? ',[username],function(err,res,fields)
+    {
+      if(err) throw err;
+      message = res;
+    });
+  }
+  else if(role=='faculty')
+  {
+    con.query('SELECT name FROM `staffs` where `staffid` = ? ',[username],function(err,res,fields)
+    {
+      if(err) throw err;
+      message = res;
+      //len=res.Length;
+    });
+  }
+  
+    response.send(200,message);
   
 });
 

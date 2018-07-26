@@ -2,8 +2,7 @@ var express = require('express');
 var mysql = require('mysql');
 var router= express.Router();
 var username;
-var password;
-var message;
+
 
 router.post('/', function(req, response, next) {
     var con = mysql.createConnection(
@@ -22,22 +21,13 @@ router.post('/', function(req, response, next) {
     
     console.log(req.body);
     username = req.body.username;
-    password = req.body.password;
+    
    
-    con.query('UPDATE `students` SET `password`= ? WHERE `rollno`= ?',[password , username],function(err,results)
+    con.query('SELECT * FROM `CAT_1` where `rollno` = ?',[username],function(err,res,fields)
     {
       if(err) throw err;
-      if(results.affectedRows==1)
-        message={
-            affectedRows:"1"
-        };
-        else
-            message={
-                affectedRows:"0"
-            }
-        
-      
-    response.send(200,message);
+      response.send(200,res);
+
      });
     
   });
