@@ -42,7 +42,7 @@ router.post('/', function(req, response, next) {
     });
   }
   
-    response.send(200,message);
+    response.send({"success":true});
   
 });
 

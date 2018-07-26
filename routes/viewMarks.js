@@ -1,10 +1,12 @@
 var express = require('express');
 var mysql = require('mysql');
 var router= express.Router();
-var username;
+
 
 
 router.post('/', function(req, response, next) {
+    var username;
+    
     var con = mysql.createConnection(
       {
         host:"localhost",

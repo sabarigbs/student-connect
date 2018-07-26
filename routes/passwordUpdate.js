@@ -29,11 +29,11 @@ router.post('/', function(req, response, next) {
       if(err) throw err;
       if(results.affectedRows==1)
         message={
-            affectedRows:"1"
+            "success":true
         };
         else
             message={
-                affectedRows:"0"
+                "success":false
             }
         
       
