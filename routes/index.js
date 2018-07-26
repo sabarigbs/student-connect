@@ -1,22 +1,36 @@
 var express = require('express');
 var router = express.Router();
-var connection = require('./databaseConnection');
+var mysql = require('mysql');
 var username;
 var len;
 /* GET home page. */
 router.post('/', function(req, res, next) {
-   username=req.body.username;
- 
-  connection.query('SELECT name FROM `students` where `rollno` = ? ',[username],function(err,res,fields)
+  var con = mysql.createConnection(
     {
-      if(err) throw err;
-      len=res.Length;
-    });
+      host:"localhost",
+      user:"root",
+      password:"",
+      database:"app"
+    }
+  );
+  con.connect(function(err)
+  {
+    if (err) throw err;
+    console.log("connected!");
+  });
+  
+  username=req.body.username;
+  res.render('index', { title: 'Express' });
+  con.query('SELECT name FROM `students` where `rollno` = ? ',[username],function(err,res,fields)
+  {
+    if(err) throw err;
+    len=res.Length;
+  });
   if(len!='undefined')
    res.send(200,username);
   else
     res.send(500,'User Not Found');
-  res.render('index', { title: 'Express' });
+  
 });
 
 module.exports = router;
