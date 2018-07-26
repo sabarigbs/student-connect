@@ -23,7 +23,7 @@ router.post('/', function(req, response, next) {
     username = req.body.username;
     password = req.body.password;
    // result.render('index', { title: 'Express' });
-    con.query('SELECT name FROM `students` where `rollno` = ? and `password` = ?',[username],[password],function(err,res,fields)
+    con.query('SELECT password FROM `students` where `rollno` = ? and `password` = ?',[username],[password],function(err,res,fields)
     {
       if(err) throw err;
       if(password==res.password)
