@@ -4,7 +4,7 @@ var mysql = require('mysql');
 var username;
 var len;
 /* GET home page. */
-router.post('/', function(req, res, next) {
+router.post('/', function(req, response, next) {
   var con = mysql.createConnection(
     {
       host:"localhost",
@@ -20,16 +20,16 @@ router.post('/', function(req, res, next) {
   });
   
   username=req.body.username;
-  res.render('index', { title: 'Express' });
+  //res.render('index', { title: 'Express' });
   con.query('SELECT name FROM `students` where `rollno` = ? ',[username],function(err,res,fields)
   {
     if(err) throw err;
     len=res.Length;
   });
   if(len!='undefined')
-   res.send(200,username);
+   response.send(200,username);
   else
-    res.send(500,'User Not Found');
+    response.send(500,'User Not Found');
   
 });
 

@@ -4,7 +4,7 @@ var router= express.Router();
 var username;
 var password;
 
-router.post('/', function(req, result, next) {
+router.post('/', function(req, response, next) {
     var con = mysql.createConnection(
       {
         host:"localhost",
@@ -27,9 +27,9 @@ router.post('/', function(req, result, next) {
     {
       if(err) throw err;
       if(password==res.password)
-        result.send(200,'Password Correct');
+        response.send(200,'Password Correct');
     else
-        result.send(500,'Password Incorrect');
+        response.send(500,'Password Incorrect');
 
      });
     
