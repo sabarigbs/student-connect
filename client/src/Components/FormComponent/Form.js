@@ -126,7 +126,7 @@ export default class Form extends Component {
       return;
     }
 
-    fetch("http://localhost:3001/", {
+    fetch("http://localhost:3001/password", {
       method: 'POST',
       body: JSON.stringify({
         "username": this.state.username,
