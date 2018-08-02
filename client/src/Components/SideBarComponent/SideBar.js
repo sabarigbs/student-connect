@@ -6,25 +6,30 @@ class SideBar extends Component {
     render() {
         return (
             
-                <div className="sidebar">
+            <div className="sidebar">
 
-                   
-                        <Image 
-                        src="../../../images/profile.png"
-                        className="responsive-img circle"/>
+                <div className="sidebar-content-wrapper">
 
-                        <ProfileInfo
+                    <div className="profile-pic">
+                        <Image
+                        src="../images/profile.png" 
+                        alt="profile"
+                        />
+                    </div>
+
+                
+                    <ProfileInfo className="profile-info"
                         username="Sabari Govindarajan"
                         rollno="15CSR174"
-                        department="Computer Science and Engineering"
-                        year="Final"
+                        department="Department of Computer Science and Engineering"
+                        year="Final Year"
                         section="C"
-                        
-                        />
+                    />
                     
-
                 </div>
-           
+
+            </div>
+
         );
     }
 }
