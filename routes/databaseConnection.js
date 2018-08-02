@@ -1,17 +1,17 @@
 var express = require('express');
-var router = express.Router();
 var mysql = require('mysql');
-var exports = module.exports = {};
-exports.connection = mysql.createConnection({
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : '',
-    database : 'app'
+
+
+var connection = mysql.createConnection({
+    host:"db4free.net",
+    user:"sabari",
+    password:"sabari.b",
+    database:"student_connect"
 });
 
-exports.connection.connect(function(err) {
+connection.connect(function(err) {
     if (err) throw err;
 });
 
-module.exports = exports;
+module.exports = connection;
 

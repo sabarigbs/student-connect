@@ -1,40 +1,48 @@
 var express = require('express');
-var mysql = require('mysql');
-var router= express.Router();
-var username;
-var password;
+var router = express.Router();
+var db = require('./databaseConnection');
 
-router.post('/', function(req, response, next) {
-  console.log("Hello from password");
-    var con = mysql.createConnection(
-      {
-        host:"localhost",
-        user:"root",
-        password:"",
-        database:"app"
-      }
-    );
-    con.connect(function(err)
-    {
-      if (err) throw err;
-      console.log("connected!");
-    });
-    
-    console.log(req.body);
-    username = req.body.username;
-    password = req.body.password;
-    role = req.body.role;
-   
-    con.query('SELECT password FROM `students` where `rollno` = ? and `password` = ?',[username],[password],function(err,res,fields)
-    {
-      if(err) throw err;
-      if(password==res.password)
-        response.send({"success":true});
+
+router.post('/',function(req,response,next){
+
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Content-Type', 'application/json');
+
+  var username = req.body.username;
+  var password = req.body.password;
+  var role = req.body.role;
+  var message;
+  //console.log(username + " " + password + " " + role);
+
+  function sendResponse(res){
+    console.log(res.password);
+    if(res.length === 1)
+      if(password === res.password)
+        message={'success':true};
       else
-        response.send({"success":false});
+        message={'success':false};
+    else
+      message={'success':false};
+    }
 
-     });
-    
-  });
-  
-  module.exports = router;
+    if (role === 'students') {
+
+      db.query('SELECT password FROM `students` WHERE rollno LIKE ? ', [username], function (err, res, fields) {
+        if(err)
+          throw err;
+        sendResponse(res[0]);
+        response.send(message);
+      });
+    }
+    else if (role === 'faculty') {
+      db.query('SELECT password FROM `faculty` where `faculty_id` LIKE ? ', [username], function (err, res, fields) {
+        if(err)
+          throw err;
+        sendResponse(res);
+        response.send(message);
+      });
+    }
+
+});
+
+module.exports = router;

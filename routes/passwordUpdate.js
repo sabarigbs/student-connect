@@ -1,45 +1,69 @@
 var express = require('express');
-var mysql = require('mysql');
 var router= express.Router();
-var username;
-var password;
-var message;
+var db = require('./databaseConnection');
 
-router.post('/', function(req, response, next) {
-    var con = mysql.createConnection(
-      {
-        host:"localhost",
-        user:"root",
-        password:"",
-        database:"app"
-      }
-    );
-    con.connect(function(err)
-    {
-      if (err) throw err;
-      console.log("connected!");
-    });
+router.post('/', function(req, response, next){
     
-    console.log(req.body);
-    username = req.body.username;
-    password = req.body.password;
-   
-    con.query('UPDATE `students` SET `password`= ? WHERE `rollno`= ?',[password , username],function(err,results)
-    {
-      if(err) throw err;
-      if(results.affectedRows==1)
-        message={
-            "success":true
-        };
-        else
-            message={
-                "success":false
-            }
+    var username = req.body.username;
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
+    var role = req.body.role;
+    var message;
+
+    function checkOldPassword(results){
+        if(results.password === oldPassword)
+            return true;
+        return false;
+    }
+
+    function checkAffectedRows(results){
+        if(results.affectedRows === 1)
+            return true;
+        return false;
+    }
+
+    if(role === 'students'){
+        db.query('SELECT password from `students` where rollno=?',[username],function(err,res,fields){
+
+            if(err) 
+                throw err;
+            if(checkOldPassword(res)){
+                db.query('UPDATE `students` SET `password`= ? WHERE `rollno`= ?',[newPassword,username],function(err,results,fields){
+                    if(err) 
+                        throw err;
+                    if(checkAffectedRows(results))
+                        message={'updated':true};
+                    else
+                        message={'updated':false};
+                    
+                });
+            }else
+                message={'oldPassword':false};
+            response.send(message);
+        });
+    }else{
+        db.query('SELECT password from `faculty` where staff_id=?',[username],function(err,res,fields){
+
+            if(err) 
+                throw err;
+            if(checkOldPassword(res)){
+                db.query('UPDATE `faculty` SET `password`= ? WHERE `rollno`= ?',[newPassword,username],function(err,results,fields){
+                    if(err) 
+                        throw err;
+                    if(checkAffectedRows(results))
+                        message={'updated':true};
+                    else
+                        message={'updated':false};
+                    
+                });
+            }else
+                message={'oldPassword':false};
+            response.send(message);
+        });
+    }
+
+    response.send(message);
+    
+});
         
-      
-    response.send(200,message);
-     });
-    
-  });
-  
-  module.exports = router;
+module.exports = router;
