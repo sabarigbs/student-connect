@@ -1,202 +1,199 @@
 import React, { Component } from 'react';
 import Input from '../InputComponent/Input';
 import Button from '../ButtonComponent/Button';
-import Alert from '../Alert/Alert';
-
-export default class Form extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      old:'',
-      new:'',
-      role: 'student',
-      isUserVerified: false,
-      isLoginSuccessful: false,
-      errorText: '',
-      passwordUpdateFlag:false
-    };
-    this.handleNextClick = this.handleNextClick.bind(this);
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.toggleLogin = this.toggleLogin.bind(this);
-    this.updatePassword = this.updatePassword.bind(this);
-    this.handleUpdateClick = this.handleUpdateClick.bind(this);
-    this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
-    this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
-    
-  }
+import ProgressBar from '../ProgressBarComponent/ProgressBar';
+import SwitchComponent from '../SwitchComponent/SwitchComponent';
 
 
 
-  handleNameChange(event) {
-    this.setState({ username: event.target.value });
-  }
+class Form extends Component {
 
-  handlePasswordChange(event) {
-    this.setState({ password: event.target.value });
-  }
-
-  handleOldPasswordChange(event) {
-    this.setState({ old: event.target.value });
-  }
-
-  handleNewPasswordChange(event) {
-    this.setState({ new: event.target.value });
-  }
-
-  handleUpdateClick(){
-    fetch("http://localhost:3001/passwordUpdate", {
-      method: 'POST',
-      body: JSON.stringify({
-        "old": this.state.old,
-        "password": this.state.password,
-        "role": this.state.role
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    })
-      .then((res) => res.json())
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then((response) => {
-        if (response) {
-          if (response['success'])
-            this.setState({isLoginSuccessful:true});
-        } else {
-          this.setState({
-            errorText: "Server Error"
-          })
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            role:'students',
+            isUserVerified: false
         }
-      });
 
-  }
-
-
-
-  handleNextClick(event) {
-
-    
-    if (this.state.username === "") {
-      this.setState({ errorText: "Username must be filled" });
-      return;
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleNextClick = this.handleNextClick.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
+        this.handleToggle = this.handleToggle.bind(this);
+        this.makeNetworkCall = this.makeNetworkCall.bind(this);
+        
     }
 
-    fetch("/", {
-      method: 'POST',
-      body: JSON.stringify({
-        "username": this.state.username,
-        "role": this.state.role
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    })
-      .then((res) => res.json())
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then((response) => {
-        if (response) {
-          if (response['success'])
-            this.setState({
-              isUserVerified: true
-            });
-        } else {
-          this.setState({
-            errorText: "Server Error"
-          })
-        }
-      });
+    makeNetworkCall(endPoint, method, body) {
+        console.log(endPoint);
+        return fetch(endPoint, {
+            method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(body)
 
-  }
+        })
 
-  handleSubmitClick(event) {
 
-    
-    if (this.state.password === "") {
-      this.setState({ errorText: "Password must be filled" });
-      return;
     }
 
-    fetch("http://localhost:3001/password", {
-      method: 'POST',
-      body: JSON.stringify({
-        "username": this.state.username,
-        "password": this.state.password,
-        "role": this.state.role
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8'
-      }
-    })
-      .then((res) => res.json())
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then((response) => {
-        if (response) {
-          if (response['success'])
-            this.setState({isLoginSuccessful:true});
-        } else {
-          this.setState({
-            errorText: "Server Error"
-          })
-        }
-      });
+    handleToggle(event){
+        if(event.target.checked)
+            this.setState({role:'staffs'});
+        else
+            this.setState({role:'students'});
+        
+    }
+
+    handleUsernameChange(event) {
+        console.log('user');
+
+        this.setState({ username: event.target.value });
+    }
+
+    handlePasswordChange(event) {
+        console.log('password');
+        this.setState({ password: event.target.value });
+    }
+
+    handleNextClick(event) {
+
+        event.preventDefault();
 
 
-  }
+        let endPoint;
+        let method;
+        let body = {};
 
-  toggleLogin() {
+        endPoint = 'http://localhost:3001/';
+        method = 'POST';
+        body = {
+            username: this.state.username,
+            role:this.state.role
+        };
 
-    this.setState((prevState, props) => ({
-      role: (prevState.role === 'student') ? 'faculty' : 'student'
-    }));
+        let responseFromAPI = this.makeNetworkCall(endPoint, method, body);
 
-  }
+        responseFromAPI
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+        .then((response) => {
+            // if (response['success'])
+            //     this.setState({ isUserVerified: true });
+            console.log(response);
+            
+        })
 
-  updatePassword(){
 
-    this.setState({passwordUpdateFlag:true});
-    
-
-  }
+    }
 
 
-  render() {
+    handleSubmitClick(event) {
+
+        event.preventDefault();
+
+
+        let endPoint;
+        let method;
+        let body = {};
+
+        endPoint = 'http://localhost:3001/password';
+        method = 'POST';
+        body = {
+            username: this.state.username,
+            password: this.state.password
+        };
+
+        let responseFromAPI = this.makeNetworkCall(endPoint, method, body);
+
+        responseFromAPI
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+        .then((response) => {
+            if (response['success'])
+                this.setState({ isLoginSuccessful: true });
+
+        })
+
+
+    }
+
+
+render() {
+
+    const isUserVerified = this.state.isUserVerified;
+    let input;
+    let passwordInput;
+    let button;
+
+    if (!isUserVerified) {
+
+        input = <Input
+            id="username"
+            name="Username"
+            type="text"
+            className="validate"
+            onChange={this.handleUsernameChange} />
+
+        passwordInput = null;
+
+        button = <Button
+            id="next"
+            className="btn btn-center"
+            text="Next"
+            onClick={this.handleNextClick} />
+    } else {
+
+        input = null;
+        passwordInput = <Input
+            id="password"
+            name="Password"
+            type="password"
+            className="validate"
+            onChange={this.handlePasswordChange} />
+
+        button = <Button
+            type="submit"
+            id="login"
+            className="btn btn-center"
+            text="Login"
+            onClick={this.handleSubmitClick} />
+    }
 
     return (
-      <div className="form">
-
-        <img src="../../../images/klogotrans.png" width="35%" height="20%" alt="logo"></img>
-        <p class="h3">Student Connect</p>
         
-        {this.state.errorText && <Alert class="alert alert-danger" text={this.state.errorText} />}
+            <div class="container">
+        
+            <ProgressBar/>
 
-        <Input name="Username" type="text" placeholder="Enter your username" onChange={this.handleNameChange} />
+            <div className="form-wrapper ">
 
-        {this.state.isUserVerified && <Input name="Password" type="password" placeholder="Enter your password" onChange={this.handlePasswordChange} />}
-        {!this.state.isUserVerified && <Button class="btn btn-primary" name="Next" onClick={this.handleNextClick} />}
-        {this.state.isUserVerified && <Button class="btn btn-primary" name="Login" onClick={this.handleSubmitClick} />}
+                
+                <form>
+                    
+                    <div>
+                        <h5>Student Connect</h5>
+                    </div>
+                    {input}
+                    {passwordInput}
+                    {button}
+                </form>
 
-        {this.state.passwordUpdateFlag && <Input name="Old Password" type="password" placeholder="Enter your old password" onChange={this.handleOldPasswordChange} />}
-        {this.state.passwordUpdateFlag && <Input name="New Password" type="password" placeholder="Enter your new password" onChange={this.handleNewPasswordChange} />}
-        {this.state.isUserVerified && <Button class="btn btn-primary" name="Update" onClick={this.handleUpdateClick} />}
+                <SwitchComponent onClick={this.handleToggle}/>
+                
 
+            </div>
 
-        <p class="loginToggler" onClick={this.toggleLogin}>Not {this.state.role}?</p>
-        <p class="loginToggler" onClick={this.updatePassword}>Update Password</p>
+        </div>
+    
+        
 
-      </div>
-    )
-  }
-};
+    );
+}
+}
+
+export default Form;
