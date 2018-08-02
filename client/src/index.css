@@ -2,7 +2,9 @@ html,body{
     min-height: 100vh;
 }
 
+
 .form-wrapper{
+   
     max-width: 350px;
     min-width: 300px;
     padding: 2rem;

@@ -12,7 +12,7 @@ router.post('/',function(req,response,next){
   var password = req.body.password;
   var role = req.body.role;
   var message;
-  //console.log(username + " " + password + " " + role);
+  console.log(username + " " + password + " " + role);
 
   function sendResponse(res){
     console.log(res.password);
