@@ -14,7 +14,9 @@ class Form extends Component {
             username: '',
             password: '',
             role:'students',
-            isUserVerified: false
+            isLoginSuccessful:false,
+            isUserVerified: false,
+            progressBarVisibility : 'progress hide'
         }
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -76,14 +78,16 @@ class Form extends Component {
             role:this.state.role
         };
 
+        this.setState({progressBarVisibility:'progress'});
         let responseFromAPI = this.makeNetworkCall(endPoint, method, body);
 
         responseFromAPI
         .then((res) => res.json())
         .catch((err) => console.log(err))
         .then((response) => {
-            // if (response['success'])
-            //     this.setState({ isUserVerified: true });
+            this.setState({progressBarVisibility:'progress hide'});
+            if (response['success'])
+                this.setState({ isUserVerified: true });
             console.log(response);
             
         })
@@ -105,18 +109,22 @@ class Form extends Component {
         method = 'POST';
         body = {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
+            role:this.state.role
         };
-
+        this.setState({progressBarVisibility:'progress'});
         let responseFromAPI = this.makeNetworkCall(endPoint, method, body);
 
         responseFromAPI
         .then((res) => res.json())
         .catch((err) => console.log(err))
         .then((response) => {
+            this.setState({progressBarVisibility:'progress hide'});
             if (response['success'])
                 this.setState({ isLoginSuccessful: true });
-
+            console.log(response);
+            this.props.onSubmit(this.state.isLoginSuccessful);
+            
         })
 
 
@@ -166,9 +174,10 @@ render() {
 
     return (
         
-            <div class="container">
         
-            <ProgressBar/>
+        <div id="form-container" className="container">
+    
+            <ProgressBar className={this.state.progressBarVisibility}/>
 
             <div className="form-wrapper ">
 
@@ -183,12 +192,13 @@ render() {
                     {button}
                 </form>
 
-                <SwitchComponent onClick={this.handleToggle}/>
+            <SwitchComponent onClick={this.handleToggle}/>
                 
 
             </div>
 
         </div>
+    
     
         
 
