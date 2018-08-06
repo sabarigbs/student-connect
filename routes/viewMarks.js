@@ -20,7 +20,7 @@ router.post('/', function(req, response, next) {
         message={
             'success':true,
             'rollno':username,
-            'studentName':res[0]['student_name'],
+            'studentName':res['student_name'],
             'marks':res
         }
         console.log(res)
