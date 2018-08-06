@@ -16,18 +16,18 @@ router.post('/',function(req,response,next){
 
   function sendResponse(res){
     console.log(res.password);
-    if(res.length === 1)
+    
       if(password === res.password)
         message={'success':true};
       else
         message={'success':false};
-    else
-      message={'success':false};
+   
+  
     }
 
     if (role === 'students') {
 
-      db.query('SELECT password FROM `students` WHERE rollno LIKE ? ', [username], function (err, res, fields) {
+      db.query('SELECT password FROM `students` WHERE student_id = ? ', [username], function (err, res, fields) {
         if(err)
           throw err;
         sendResponse(res[0]);
@@ -35,7 +35,7 @@ router.post('/',function(req,response,next){
       });
     }
     else if (role === 'faculty') {
-      db.query('SELECT password FROM `faculty` where `faculty_id` LIKE ? ', [username], function (err, res, fields) {
+      db.query('SELECT password FROM `faculty` where `faculty_id` = ? ', [username], function (err, res, fields) {
         if(err)
           throw err;
         sendResponse(res);
