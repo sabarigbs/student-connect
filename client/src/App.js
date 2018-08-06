@@ -10,14 +10,15 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      username: '',
       isLoginSuccessful : false
     }
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
-  onFormSubmit(isLoginSuccessful){
+  onFormSubmit(isLoginSuccessful,username){
     console.log("App " + isLoginSuccessful);
-    this.setState({isLoginSuccessful:!isLoginSuccessful});
+    this.setState({username,isLoginSuccessful});
   }
 
   render() {
@@ -26,7 +27,7 @@ class App extends Component {
     if(!this.state.isLoginSuccessful)
       appContent = <Form onSubmit={this.onFormSubmit}/>;
     else
-      appContent = <Marks/>
+      appContent = <Marks username = {this.state.username}/>
     
     return (
       <div>

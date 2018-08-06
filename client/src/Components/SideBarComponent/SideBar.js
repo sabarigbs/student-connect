@@ -3,6 +3,7 @@ import Image from '../ImageComponent/Image';
 import ProfileInfo from '../ProfileInfoComponent/ProfileInfo';
 
 class SideBar extends Component {
+
     render() {
         return (
             
@@ -19,11 +20,11 @@ class SideBar extends Component {
 
                 
                     <ProfileInfo className="profile-info"
-                        username="Sabari Govindarajan"
-                        rollno="15CSR174"
-                        department="Department of Computer Science and Engineering"
-                        year="Final Year"
-                        section="C"
+                        username={this.props.username}
+                        rollno={this.props.rollno}
+                        // department="Department of Computer Science and Engineering"
+                        // year="Final Year"
+                        // section="C"
                     />
                     
                 </div>

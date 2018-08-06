@@ -123,7 +123,7 @@ class Form extends Component {
             if (response['success'])
                 this.setState({ isLoginSuccessful: true });
             console.log(response);
-            this.props.onSubmit(this.state.isLoginSuccessful);
+            this.props.onSubmit(this.state.isLoginSuccessful,this.state.username);
             
         })
 
