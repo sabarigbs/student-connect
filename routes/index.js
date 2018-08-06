@@ -28,7 +28,7 @@ router.post('/', function (req, response, next) {
 
   if (role === 'students') {
 
-    db.query('SELECT name FROM `students` where `rollno` = ? ', [username], function (err, res, fields) {
+    db.query('SELECT student_name FROM `students` where `student_id` = ? ', [username], function (err, res, fields) {
       if(err)
         throw err;
       setResponse(res);
@@ -36,7 +36,7 @@ router.post('/', function (req, response, next) {
     });
   }
   else if (role === 'faculty') {
-    db.query('SELECT faculty_name FROM `faculty` where `faculty_id` = ? ', [username], function (err, res, fields) {
+    db.query('SELECT faculty_name FROM `faculty` where `student_id` = ? ', [username], function (err, res, fields) {
       if(err)
         throw err;
       setResponse(res);
