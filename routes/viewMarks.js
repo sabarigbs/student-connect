@@ -14,16 +14,16 @@ router.post('/', function(req, response, next) {
 
     console.log(username);
       
-    db.query('SELECT student_name,course_id,course_name,marks FROM students NATURAL JOIN enrollments NATURAL JOIN courses NATURAL JOIN marks WHERE student_id = ? ',[username],function(err,res,feilds){
+    db.query('SELECT student_id,student_name,course_id,course_name,marks FROM students NATURAL JOIN enrollments NATURAL JOIN courses NATURAL JOIN marks WHERE student_id = ? ',[username],function(err,res,feilds){
         if(err)
             throw err;
         message={
             'success':true,
-            'rollno':username,
-            'studentName':res['student_name'],
+            'rollno':res[0]['student_id'],
+            'studentName':res[0]['student_name'],
             'marks':res
         }
-        console.log(res)
+        console.log(message);
         response.send(message);
     }); 
       

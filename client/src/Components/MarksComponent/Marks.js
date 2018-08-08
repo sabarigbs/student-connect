@@ -59,7 +59,9 @@ class Marks extends Component {
             
             if (response['success'])
                 this.setState({ studentName:response['studentName'],rollno:response['rollno'],marks:response['marks'] });
-            console.log(this.state.marks);
+            //console.log(response['rollno']);
+            console.log(this.state.rollno);
+
             
         })
     }
@@ -73,7 +75,7 @@ class Marks extends Component {
                 <div className="content">
                     <SideBar 
                         username = {this.state.studentName}
-                        rollno = {this.state.username}
+                        rollno = {this.state.rollno}
                     />
                     <MainContent
                         marks = {this.state.marks}

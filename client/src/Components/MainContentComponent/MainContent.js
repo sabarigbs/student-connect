@@ -5,45 +5,7 @@ class MainContent extends Component {
 
     render() {
 
-        // let response = [
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14GET71",
-        //         "course_name": "Total Quality Management ",
-        //         "marks": 36
-        //     },
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14CST71",
-        //         "course_name": "Machine Learning ",
-        //         "marks": 36
-        //     },
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14CST72",
-        //         "course_name": "Mobile Communication ",
-        //         "marks": 26
-        //     },
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14CSE11",
-        //         "course_name": "Business Intelligence and its Application ",
-        //         "marks": 41
-        //     },
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14CSO07",
-        //         "course_name": "E-Commerce ",
-        //         "marks": 39
-        //     },
-        //     {
-        //         "student_name": "Srisibi C",
-        //         "course_id": "14ITO04",
-        //         "course_name": "Mobile Application Development",
-        //         "marks": 36
-        //     }
-        // ];
-
+        
         let row = this.props.marks.map((res)=>{
             return <tr>
                 <td>
